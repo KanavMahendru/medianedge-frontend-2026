@@ -6,6 +6,7 @@ use App\Http\Controllers\StockDashboardController;
 use App\Http\Controllers\FinanceDashboardController;
 
 // ===== real data =======
+Route::get('/', [FinanceDashboardController::class, 'index'])->name('index');
 Route::get('/finance', [FinanceDashboardController::class, 'index'])->name('finance.index');
 Route::get('/finance/live-data', [FinanceDashboardController::class, 'liveData'])->name('finance.live');
 // Stock Dashboard Routes
@@ -16,19 +17,13 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
 
 Route::get('/stock', function () {
-
     $apiKey = env('TWELVE_API_KEY');
-
     $response = Http::get("https://api.twelvedata.com/quote?symbol=INTC&apikey=$apiKey");
-
     return $response->json();
 });
 
 Route::get('/test-fmp', function () {
-
     $apiKey = env('FMP_API_KEY');
-
-    // Example: Apple stock data
     $response = Http::get("https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=$apiKey");
 
     $data = $response->json();
