@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\StockDashboardController;
 use App\Http\Controllers\FinanceDashboardController;
 
-Route::get('/', [FinanceDashboardController::class, 'index'])->name('index');
+
 // ===== real data =======
 Route::get('/', [FinanceDashboardController::class, 'index'])->name('index');
 Route::get('/test', [FinanceDashboardController::class, 'index'])->name('index');
