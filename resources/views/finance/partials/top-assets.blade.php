@@ -14,8 +14,16 @@
         const DUMMY_ASSETS = @json($topAssets);
         let currentTopAssetRegion = 'US';
         let currentTopAssetPage = 0;
-        const itemsPerPage = 4;
+        let itemsPerPage = window.innerWidth <= 768 ? 2 : 4;
         let topAssetRenderTimer;
+
+        window.addEventListener('resize', () => {
+            const newItemsPerPage = window.innerWidth <= 768 ? 2 : 4;
+            if (newItemsPerPage !== itemsPerPage) {
+                itemsPerPage = newItemsPerPage;
+                renderTopAssets(currentTopAssetRegion, 0);
+            }
+        });
 
         function renderTopAssets(region = currentTopAssetRegion, page = 0) {
             currentTopAssetRegion = region;
@@ -58,7 +66,7 @@
                 const totalPages = Math.ceil(data.length / itemsPerPage);
 
                 // Handle Pagination Visibility
-                if (data.length > 4) {
+                if (data.length > itemsPerPage) {
                     pg.style.display = 'flex';
                     document.getElementById('apPrev').disabled = (currentTopAssetPage === 0);
                     document.getElementById('apNext').disabled = (currentTopAssetPage >= totalPages - 1);
