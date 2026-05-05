@@ -47,7 +47,7 @@
             @include('finance.partials.top-assets')
 
             {{-- Market Summary Accordion --}}
-            <!-- @include('finance.partials.market-summary') -->
+            {{-- @include('finance.partials.market-summary') --}}
 
              <div class="grid-wrap">
 
