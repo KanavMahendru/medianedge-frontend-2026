@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.log
 .DS_Store
 .env
@@ -53,3 +54,8 @@ Homestead.yaml
 Thumbs.db
 /developement
 storage
+=======
+/vendor
+/node_modules
+.env
+>>>>>>> d4eca65 (Remove vendor from repo)
