@@ -49,11 +49,11 @@
             {{-- Market Summary Accordion --}}
             @include('finance.partials.market-summary')
 
-            <!-- <div class="grid-wrap">
+             <div class="grid-wrap">
 
                     @include('finance.partials.performance-panels')
 
-                </div> -->
+                </div> 
 
             <!-- Top 500 Heatmap -->
             @include('finance.partials.heatmap')
