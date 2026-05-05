@@ -7,6 +7,7 @@ use App\Http\Controllers\FinanceDashboardController;
 
 // ===== real data =======
 Route::get('/', [FinanceDashboardController::class, 'index'])->name('index');
+Route::get('/test', [FinanceDashboardController::class, 'index'])->name('index');
 Route::get('/finance', [FinanceDashboardController::class, 'index'])->name('finance.index');
 Route::get('/finance/live-data', [FinanceDashboardController::class, 'liveData'])->name('finance.live');
 // Stock Dashboard Routes
