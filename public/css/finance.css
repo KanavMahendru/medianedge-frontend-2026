@@ -1804,6 +1804,12 @@ body {
         align-items: flex-start;
         gap: 10px;
     }
+    .topnav-left {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 10px;
+    }
     .topnav-right {
         position: absolute;
         right: 15px;
@@ -1880,6 +1886,26 @@ body {
     }
     .standouts-section {
         margin: 15px 10px;
+    }
+    
+    /* Popular Spaces Responsive */
+    .spaces-section {
+        margin: 20px 10px 0;
+    }
+    .space-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 16px;
+    }
+    .space-btn {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .standout-card-v2 {
+        padding: 16px;
     }
     .standout-card-v2 {
         padding: 16px;
@@ -2015,5 +2041,32 @@ body {
 @media (max-width: 600px) {
     .dev-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ══════════════════════════════════════
+               GLOBAL OVERFLOW FIXES
+            ══════════════════════════════════════ */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .hm-grid {
+        grid-template-columns: repeat(7, 1fr) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hm-grid {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+    .asset-item {
+        flex: 0 0 calc(50% - 8px) !important;
+        padding: 10px !important;
+    }
+    .asset-strip {
+        gap: 8px !important;
     }
 }
