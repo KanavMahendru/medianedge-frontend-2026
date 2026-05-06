@@ -251,10 +251,10 @@
                         datasets: [{
                             data: history,
                             borderColor: color,
-                            borderWidth: 1.5,
+                            borderWidth: 1.2,
                             backgroundColor: gradient,
                             fill: true,
-                            tension: 0.4,
+                            tension: 0.1,
                             pointRadius: 0,
                         }]
                     },

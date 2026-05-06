@@ -58,28 +58,8 @@ class FinanceDashboardController extends Controller
             ],
         ];
 
-        $topAssets = [
-            "US" => [
-                ["name" => "S&P 500", "price" => "5,234.18", "change_pct" => 1.25, "change_abs" => "+64.12", "history" => [5100, 5150, 5120, 5200, 5180, 5234.18], "symbol" => "SPX"],
-                ["name" => "Dow Jones", "price" => "39,512.44", "change_pct" => 0.82, "change_abs" => "+320.10", "history" => [39000, 39100, 39050, 39300, 39400, 39512.44], "symbol" => "DJI"],
-                ["name" => "Nasdaq", "price" => "16,428.82", "change_pct" => 1.55, "change_abs" => "+251.10", "history" => [16000, 16100, 16050, 16300, 16200, 16428.82], "symbol" => "IXIC"],
-                ["name" => "Bitcoin", "price" => "US$80,797.49", "change_pct" => 1.33, "change_abs" => "+US$1,061.79", "history" => [79000, 79200, 78500, 79800, 80500, 80797.49], "symbol" => "BTC"],
-                ["name" => "Apple Inc", "price" => "173.50", "change_pct" => -0.50, "change_abs" => "-0.87", "history" => [175, 174, 176, 172, 174, 173.50], "symbol" => "AAPL"],
-                ["name" => "Tesla Inc", "price" => "170.83", "change_pct" => -2.12, "change_abs" => "-3.70", "history" => [180, 178, 175, 172, 171, 170.83], "symbol" => "TSLA"]
-            ],
-            "India" => [
-                ["name" => "NIFTY 50", "price" => "23,922.10", "change_pct" => -0.82, "change_abs" => "-197.20", "history" => [24100, 24050, 24000, 24150, 23900, 23922.10], "symbol" => "NIFTY"],
-                ["name" => "S&P BSE Sensex", "price" => "76,530.50", "change_pct" => -0.96, "change_abs" => "-738.90", "history" => [77000, 76800, 77200, 76500, 76400, 76530.50], "symbol" => "SENSEX"],
-                ["name" => "Nifty Bank Index", "price" => "54,258.35", "change_pct" => -1.13, "change_abs" => "-620.15", "history" => [55000, 54800, 54900, 54100, 54000, 54258.35], "symbol" => "BANKNIFTY"],
-                ["name" => "Nifty IT", "price" => "35,102.40", "change_pct" => 0.45, "change_abs" => "+158.20", "history" => [34800, 34900, 34700, 35000, 34950, 35102.40], "symbol" => "NIFTYIT"]
-            ],
-            "Canada" => [
-                ["name" => "S&P/TSX Composite", "price" => "22,123.45", "change_pct" => 0.35, "change_abs" => "+78.20", "history" => [21900, 22000, 21950, 22100, 22050, 22123.45], "symbol" => "TSX"],
-                ["name" => "S&P/TSX 60", "price" => "1,324.50", "change_pct" => 0.40, "change_abs" => "+5.20", "history" => [1310, 1315, 1312, 1320, 1318, 1324.50], "symbol" => "TSX60"],
-                ["name" => "Shopify", "price" => "CA$105.20", "change_pct" => -1.25, "change_abs" => "-1.33", "history" => [110, 108, 109, 106, 107, 105.20], "symbol" => "SHOP.TO"],
-                ["name" => "Royal Bank", "price" => "CA$135.40", "change_pct" => 0.15, "change_abs" => "+0.20", "history" => [134, 134.5, 134.2, 135, 134.8, 135.40], "symbol" => "RY.TO"]
-            ]
-        ];
+        $topAssets = $this->getTopAssetsData();
+
 
         $standouts = $this->getStandoutsData();
         $watchlist = [
@@ -573,5 +553,81 @@ class FinanceDashboardController extends Controller
             'India' => ['open' => $inOpen, 'time' => $inTime->format('h:i A T')],
             'Canada' => ['open' => $usOpen, 'time' => $usTime->format('h:i A T')],
         ];
+    }
+
+    private function getTopAssetsData()
+    {
+        $fmpKey = env('FMP_API_KEY');
+
+        $regions = [
+            "US" => ["^GSPC", "^IXIC", "^DJI", "BTCUSD"],
+            "India" => ["^NSEI", "^BSESN", "^NSEBANK", "BTCUSD"],
+            "Canada" => ["^GSPTSE", "SHOP.TO", "RY.TO", "TD.TO"]
+        ];
+
+        $allSymbols = [];
+        foreach ($regions as $symbols) {
+            $allSymbols = array_merge($allSymbols, $symbols);
+        }
+        $allSymbolsString = implode(',', array_unique($allSymbols));
+
+        return Cache::remember('top_assets_live_v2', 300, function () use ($fmpKey, $regions, $allSymbolsString) {
+            try {
+                $r = Http::timeout(10)->get("https://financialmodelingprep.com/api/v3/quote/{$allSymbolsString}", [
+                    'apikey' => $fmpKey
+                ]);
+
+                if ($r->successful()) {
+                    $quotes = collect($r->json())->keyBy('symbol');
+                    $result = [];
+
+                    foreach ($regions as $region => $symbols) {
+                        $regionData = [];
+                        foreach ($symbols as $symbol) {
+                            $q = $quotes->get($symbol);
+                            if ($q) {
+                                $regionData[] = [
+                                    "name" => $q['name'] ?? $symbol,
+                                    "price" => number_format($q['price'], 2),
+                                    "change_pct" => (float) $q['changesPercentage'],
+                                    "change_abs" => ($q['change'] >= 0 ? '+' : '') . number_format($q['change'], 2),
+                                    "symbol" => $symbol,
+                                    "history" => $this->getMockHistory($q['price'], $q['changesPercentage'])
+                                ];
+                            }
+                        }
+                        $result[$region] = $regionData;
+                    }
+                    return $result;
+                }
+            } catch (\Exception $e) {
+                \Log::error("Top Assets Fetch Error: " . $e->getMessage());
+            }
+
+            // Fallback empty data if API fails
+            return [
+                "US" => [],
+                "India" => [],
+                "Canada" => []
+            ];
+        });
+    }
+
+    private function getMockHistory($currentPrice, $changePct)
+    {
+        $history = [];
+        $points = 24; // More points for a realistic jagged look
+        $base = (float)$currentPrice / (1 + ((float)$changePct / 100));
+        
+        $current = $base;
+        for ($i = 0; $i < $points - 1; $i++) {
+            // Random walk with a slight trend towards the current price
+            $trend = ((float)$currentPrice - $current) / ($points - $i);
+            $variation = (rand(-100, 100) / 10000) * $base; 
+            $current += $trend + $variation;
+            $history[] = (float) $current;
+        }
+        $history[] = (float) $currentPrice;
+        return $history;
     }
 }

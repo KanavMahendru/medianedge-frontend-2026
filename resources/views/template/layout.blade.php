@@ -42,13 +42,13 @@
         const THEME_KEY = 'finance-theme';
 
         function applyTheme(theme) {
-            document.body.classList.toggle('dark-theme', theme === 'dark');
+            const isDark = theme === "dark"; document.body.classList.toggle("dark-theme", isDark); document.documentElement.classList.toggle("dark", isDark);
             const btn = document.getElementById('themeToggleBtn');
             if (btn) btn.innerHTML = theme === 'dark' ? '<i class="ph ph-sun" style="font-size:18px;"></i>' : '<i class="ph ph-moon" style="font-size:18px;"></i>';
         }
 
         function toggleTheme() {
-            const next = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+            const next = document.documentElement.classList.contains("dark") ? 'light' : 'dark';
             localStorage.setItem(THEME_KEY, next);
             applyTheme(next);
         }

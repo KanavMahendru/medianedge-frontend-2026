@@ -1,10 +1,10 @@
-<div class="section" style="padding:10px 20px;">
+<div class="section" style="padding:10px 0;">
     <div class="section-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div class="section-title" style="font-size:14px; font-weight:600; color:var(--text-main);">Top 500 Heatmap</div>
         <span style="font-size:12px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:6px;">Expand <i class="ph ph-arrows-out-simple"></i></span>
     </div>
 
-    <div class="heatmap-wrap" style="border:1px solid var(--border-main); border-radius:12px; background:var(--bg-panel); padding:12px; position:relative;">
+    <div class="heatmap-wrap" style=" border-radius:12px; background:var(--bg-panel); padding:12px; position:relative;">
         <!-- Sector Labels -->
         <div id="hm-labels" style="display:flex; width:100%; font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:8px;"></div>
         
