@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/finance.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/finance.css') }}?v={{ env('APP_VERSION', '1.0.0') }}">
     @stack('styles')
 </head>
 
