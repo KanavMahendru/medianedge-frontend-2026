@@ -11,7 +11,7 @@
 </div>
 
 {{-- RIGHT BOX --}}
-<div class="box" id="box-right" style="margin-top: 20px;">
+<div class="box" id="box-right">
     <div class="tabs">
         <button class="tab active" onclick="setTab('stocks', this, 'right')">Stocks</button>
         <button class="tab" onclick="setTab('crypto', this, 'right')">Crypto</button>

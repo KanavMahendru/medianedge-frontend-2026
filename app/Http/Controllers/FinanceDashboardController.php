@@ -560,9 +560,9 @@ class FinanceDashboardController extends Controller
         $fmpKey = env('FMP_API_KEY');
 
         $regions = [
-            "US" => ["^GSPC", "^IXIC", "^DJI", "BTCUSD"],
-            "India" => ["^NSEI", "^BSESN", "^NSEBANK", "BTCUSD"],
-            "Canada" => ["^GSPTSE", "SHOP.TO", "RY.TO", "TD.TO"]
+            "US" => ["^GSPC", "^IXIC", "^DJI", "BTCUSD", "AAPL", "MSFT", "TSLA", "NVDA"],
+            "India" => ["^NSEI", "^BSESN", "^NSEBANK", "BTCUSD", "RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS"],
+            "Canada" => ["^GSPTSE", "SHOP.TO", "RY.TO", "TD.TO", "BMO.TO", "BNS.TO"]
         ];
 
         $allSymbols = [];

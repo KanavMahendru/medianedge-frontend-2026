@@ -16,11 +16,11 @@
             <div style="display:flex; align-items:center; gap:4px;">
                 <span>-3%</span>
                 <div style="display:flex; gap:2px;">
-                    <span style="width:8px; height:8px; background:#ef4444; border-radius:1px;"></span>
-                    <span style="width:8px; height:8px; background:#f87171; border-radius:1px;"></span>
+                    <span style="width:8px; height:8px; background:#aa3443; border-radius:1px;"></span>
+                    <span style="width:8px; height:8px; background:#aa3443; border-radius:1px;"></span>
                     <span style="width:8px; height:8px; background:#334155; border-radius:1px;"></span>
                     <span style="width:8px; height:8px; background:#4ade80; border-radius:1px;"></span>
-                    <span style="width:8px; height:8px; background:#10b981; border-radius:1px;"></span>
+                    <span style="width:8px; height:8px; background:#006a27; border-radius:1px;"></span>
                 </div>
                 <span>+3%</span>
             </div>
@@ -110,7 +110,7 @@
 
                 const isNeg = d.pct.startsWith('-');
                 const arrow = isNeg ? '↘' : '↗';
-                const color = isNeg ? '#ef4444' : '#10b981';
+                const color = isNeg ? '#aa3443' : '#006a27';
 
                 return `
                     <div class="hm-tooltip">

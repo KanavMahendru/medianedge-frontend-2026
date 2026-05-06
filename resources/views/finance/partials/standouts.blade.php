@@ -79,8 +79,8 @@
 
     function buildStandoutChart(canvasId, history, labels, prevClose, isGain) {
         const ctx = document.getElementById(canvasId).getContext('2d');
-        const color = isGain ? '#22c55e' : '#ef4444';
-        const bgColor = isGain ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+        const color = isGain ? '#006a27' : '#aa3443';
+        const bgColor = isGain ? 'rgba(0, 106, 39, 0.1)' : 'rgba(170, 52, 67, 0.1)';
         
         // Destroy existing chart if any
         if (standoutCharts[canvasId]) {

@@ -49,11 +49,11 @@
             {{-- Market Summary Accordion --}}
             {{-- @include('finance.partials.market-summary') --}}
 
-             <div class="grid-wrap">
+            <div class="grid-wrap">
 
-                    @include('finance.partials.performance-panels')
+                @include('finance.partials.performance-panels')
 
-                </div> 
+            </div>
 
             <!-- Top 500 Heatmap -->
             @include('finance.partials.heatmap')
@@ -230,17 +230,16 @@
                 const rate = COUNTRY_CONFIG[activeCountry].currency.rate();
                 const history = historyUSD.map(p => p * rate);
 
-                // Theme aware colors (fallback to standard if variables fail, but we use canvas drawing)
                 const isDark = document.body.classList.contains("dark-theme");
-                const color = isGain ? (isDark ? "#34d399" : "#10b981") : (isDark ? "#f87171" : "#ef4444");
+                const color = isGain ? "#006a27" : "#aa3443";
 
                 const ctx = canvas.getContext("2d");
-                let gradient = ctx.createLinearGradient(0, 0, 0, 40);
+                let gradient = ctx.createLinearGradient(0, 0, 0, 50);
                 if (isGain) {
-                    gradient.addColorStop(0, "rgba(16, 185, 129, 0.25)");
-                    gradient.addColorStop(1, "rgba(16, 185, 129, 0)");
+                    gradient.addColorStop(0, isDark ? "rgba(16, 185, 129, 0.2)" : "rgba(0, 106, 39, 0.15)");
+                    gradient.addColorStop(1, "rgba(0, 106, 39, 0)");
                 } else {
-                    gradient.addColorStop(0, "rgba(239, 68, 68, 0.25)");
+                    gradient.addColorStop(0, "rgba(239, 68, 68, 0.2)");
                     gradient.addColorStop(1, "rgba(239, 68, 68, 0)");
                 }
 
@@ -251,11 +250,12 @@
                         datasets: [{
                             data: history,
                             borderColor: color,
-                            borderWidth: 1.2,
+                            borderWidth: 1.5,
                             backgroundColor: gradient,
                             fill: true,
-                            tension: 0.1,
+                            tension: 0.4,
                             pointRadius: 0,
+                            pointHitRadius: 0,
                         }]
                     },
                     options: {
@@ -264,7 +264,7 @@
                         animation: false,
                         plugins: { legend: { display: false }, tooltip: { enabled: false } },
                         scales: { x: { display: false }, y: { display: false } },
-                        layout: { padding: 0 },
+                        layout: { padding: 0 }
                     },
                     plugins: [dashedLinePlugin]
                 });
@@ -300,15 +300,15 @@
                     const card = document.createElement("div");
                     card.className = "asset-item";
                     card.innerHTML = `
-                                        <div class="ai-row">
-                                            <div class="ai-name">${s.name || s.symbol}</div>
-                                            <div class="ai-pct ${cls}">${pctTxt}</div>
-                                        </div>
-                                        <div class="ai-row">
-                                           <div class="ai-price">${curP}</div>
-                                           <div class="ai-abs ${absCls}">${absTxt}</div>
-                                        </div>
-                                        <div class="ai-chart"><canvas id="${cid}"></canvas></div>`;
+                                                <div class="ai-row">
+                                                    <div class="ai-name">${s.name || s.symbol}</div>
+                                                    <div class="ai-pct ${cls}">${pctTxt}</div>
+                                                </div>
+                                                <div class="ai-row">
+                                                   <div class="ai-price">${curP}</div>
+                                                   <div class="ai-abs ${absCls}">${absTxt}</div>
+                                                </div>
+                                                <div class="ai-chart"><canvas id="${cid}"></canvas></div>`;
                     strip.appendChild(card);
 
                     setTimeout(() => buildSparkline(cid, s.history || [], isGain), 0);
@@ -393,9 +393,9 @@
             }
 
             function barColor(v) {
-                if (v < 0) return '#ef4444';
+                if (v < 0) return '#aa3443';
                 if (v < 1) return '#facc15';
-                return '#22c55e';
+                return '#006a27';
             }
 
             function renderPanel(side) {
@@ -410,11 +410,11 @@
                 data.forEach(d => {
                     const width = (Math.abs(d.value) / max) * 100;
                     list.innerHTML += `
-                                        <div class="row">
-                                            <div class="name">${d.name}</div>
-                                            <div class="bar"><div class="fill" style="width:${width}%;background:${barColor(d.value)};"></div></div>
-                                            <div class="val" style="color:${barColor(d.value)}">${d.value > 0 ? '+' : ''}${d.value.toFixed(2)}%</div>
-                                        </div>`;
+                                                <div class="row">
+                                                    <div class="name">${d.name}</div>
+                                                    <div class="bar"><div class="fill" style="width:${width}%;background:${barColor(d.value)};"></div></div>
+                                                    <div class="val" style="color:${barColor(d.value)}">${d.value > 0 ? '+' : ''}${d.value.toFixed(2)}%</div>
+                                                </div>`;
                 });
             }
 
